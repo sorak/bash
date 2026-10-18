@@ -1,0 +1,28 @@
+#! /bin/bash
+
+# Get public IP
+public=$(wget -qO - http://myexternalip.com/raw)
+
+# Set color formatting if called from sh (for Conky)
+badColor=''
+goodColor=''
+endColor=''
+align=''
+if [ "$(ps -o comm= $PPID)" == "sh" ]; then
+    badColor='${color red}'
+    goodColor='${color green}'
+    endColor='${color}'
+    align='${alignr}'
+fi
+
+source ~/bin/expand_ipv6.sh
+if is_ipv6 "$public"; then
+    public=$(expand_ipv6 "$public" | sed -e 's/:/:\n'$align'/4' -e 's/$/ /')
+fi
+
+if nordvpn status 2>/dev/null | grep -q "Connected"; then
+    echo -e "$align$goodColor$public$endColor"
+else
+    echo -e "$align$badColor$public$endColor"
+fi
+

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+# Apply LS across a directory tree
+
+# find based on the last argument provided
+find ./ 2> /dev/null|grep ${@:$#}|while read f;do
+	# run ls on every matching file
+	# all arguments before the last one are treated as params to ls
+	ls "${@:1:$#-1}" "$f"
+done
+

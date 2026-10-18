@@ -1,0 +1,5 @@
+#! /bin/bash
+
+prefix="${1:-recordScreen}"
+ffmpeg -f x11grab -framerate 30 -i :0.0   -f pulse -i default   -c:v libx264 -preset superfast -crf 23   -c:a aac -b:a 128k   ~/Videos/$prefix'_'$(date +%Y%m%d_%H%M%S).mkv
+
